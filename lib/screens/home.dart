@@ -9,6 +9,7 @@ import '../controllers/box.dart';
 import '../controllers/time.dart';
 import 'box_shape.dart';
 import 'diamond_shape.dart';
+import 'selector.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -79,10 +80,10 @@ class _HomeState extends State<Home> {
                   tag: 0,
                   color: colors[0],
                   onLongPress: () {
-                    if (clickR && clickL) {
-                      if (_boxController.listColorsBox[0] == colors[2]) {
-                        removeAnimation(colors[2]);
-                      }
+                    if (clickL && clickR) {
+                      // if (_boxController.listColorsBox[0] == colors[2]) {
+                      // removeAnimation(colors[2]);
+                      // }
                     } else if (_boxController.listColorsBox[0] == colors[0]) {
                       removeAnimation(colors[0]);
                     }
@@ -92,7 +93,7 @@ class _HomeState extends State<Home> {
                 tag: 1,
                 color: colors[1],
                 onLongPress: () {
-                  if (clickR && clickL) {
+                  if (clickL && clickR) {
                     if (_boxController.listColorsBox[0] == colors[2]) {
                       removeAnimation(colors[2]);
                     }
@@ -127,9 +128,9 @@ class _HomeState extends State<Home> {
                   color: colors[0],
                   onLongPress: () {
                     if (clickR && clickL) {
-                      if (_boxController.listColorsBox[0] == colors[2]) {
-                        removeAnimation(colors[2]);
-                      }
+                      // if (_boxController.listColorsBox[0] == colors[2]) {
+                      //   removeAnimation(colors[2]);
+                      // }
                     } else if (_boxController.listColorsBox[0] == colors[0]) {
                       removeAnimation(colors[0]);
                     }
@@ -207,10 +208,19 @@ class _HomeState extends State<Home> {
           padding: const EdgeInsets.only(bottom: 20),
           initialItemCount: _boxController.listBox.length,
           itemBuilder: (BuildContext context, int index, animated) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [_boxController.listBox[index]],
+            return Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                if (index == 0)
+                  Selector(_boxController.listBox.length)
+                else
+                  SizedBox(),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [_boxController.listBox[index]],
+                ),
+              ],
             );
           },
         );
@@ -219,30 +229,6 @@ class _HomeState extends State<Home> {
   }
 
   void removeAnimation(color) {
-    listKey.currentState?.removeItem(0, (_, animation) {
-      return SizeTransition(
-          sizeFactor: animation,
-          child: SizedBox(
-            width: Get.width,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                RectangularShape(color: color),
-              ],
-            ),
-          ));
-    }, duration: const Duration(milliseconds: 300));
-
-    _boxController.listBox.removeAt(0);
-    _boxController.listColorsBox.removeAt(0);
-
-    if (_boxController.listColorsBox.isEmpty) {
-      _timeTotal.cancel();
-    }
-  }
-
-  void addAnimation(color) {
     listKey.currentState?.removeItem(0, (_, animation) {
       return SizeTransition(
           sizeFactor: animation,
@@ -316,7 +302,7 @@ class _HomeState extends State<Home> {
       status = true;
       _timeTotal = Timer.periodic(Duration(seconds: 1), (_) {
         _timeController.total++;
-        print(_timeController.total);
+        // print(_timeController.total);
       });
     }
     if (!oneTime) {
