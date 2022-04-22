@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../constants.dart';
 import 'triangle_shape.dart';
 
 class Selector extends StatelessWidget {
@@ -13,9 +14,13 @@ class Selector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).orientation == Orientation.portrait
+        ? Get.width
+        : widthGrey;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         CustomPaint(
           size: const Size(25, 30),
@@ -26,19 +31,21 @@ class Selector extends StatelessWidget {
           ),
         ),
         MediaQuery.of(context).orientation == Orientation.portrait
-            ? SizedBox(
+            ? Container(
+                margin: const EdgeInsets.only(bottom: 11),
                 width: length == 1 ? Get.width * 0.48 : Get.width * 0.35,
-                height: length == 1 ? Get.height * 0.17 : Get.height * 0.08)
-            : SizedBox(
+                height: length == 1 ? width * 0.44 : 64)
+            : Container(
+                margin: const EdgeInsets.only(bottom: 11),
                 width: length == 1 ? Get.width * 0.3 : Get.width * 0.22,
-                height: length == 1 ? Get.height * 0.29 : Get.height * 0.13),
+                height: length == 1 ? width * 0.44 : 64),
         RotatedBox(
           quarterTurns: 90,
           child: CustomPaint(
             size: const Size(25, 30),
             painter: TrianglePainter(
               strokeColor: Colors.white,
-              strokeWidth: 10,
+              strokeWidth: 1,
               paintingStyle: PaintingStyle.fill,
             ),
           ),
