@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:oktoast/oktoast.dart';
 
 import '../constants.dart';
 import '../controllers/box.dart';
@@ -26,6 +27,16 @@ class _HomeState extends State<Home> {
   bool clickL = false;
   bool clickR = false;
   final GlobalKey<AnimatedListState> listKey = GlobalKey();
+
+  customToast(text) => Container(
+        height: 150,
+        width: 300,
+        color: Colors.black87,
+        alignment: Alignment.center,
+        child: Text(text,
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.white, fontSize: 20)),
+      );
 
   @override
   void initState() {
@@ -249,6 +260,9 @@ class _HomeState extends State<Home> {
 
     if (_boxController.listColorsBox.isEmpty) {
       _timeTotal.cancel();
+    } else if (_boxController.listColorsBox.length == 1) {
+      showToastWidget(
+          customToast("กดสองปุ่ม ค้างไว้ 2 วิ\nเพื่อทำลาย Block สุดท้าย"));
     }
   }
 
@@ -257,15 +271,6 @@ class _HomeState extends State<Home> {
     required Color color,
     required int tag,
   }) {
-    var customToast = Container(
-      height: Get.height * 0.2,
-      width: Get.width * 0.45,
-      color: Colors.black87,
-      alignment: Alignment.center,
-      child: const Text("กดปุ่มสีที่ตรงกัน\nค้างไว้ 2 วินาที\nเพื่อทำลายบล็อค",
-          style: TextStyle(color: Colors.white, fontSize: 20)),
-    );
-
     return GestureDetector(
       child: Container(
         width: 60,
@@ -276,6 +281,9 @@ class _HomeState extends State<Home> {
           border: Border.all(width: widthBorder),
         ),
       ),
+      onTap: () {
+        showToastWidget(customToast("กดปุ่มสีที่ตรงกัน\nค้างไว้ 2 วินาที\nเพื่อทำลายบล็อค"));
+      },
       onLongPress: () {
         if (tag == 0) {
           clickR = true;
